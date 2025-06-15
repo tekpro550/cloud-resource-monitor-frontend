@@ -5,6 +5,8 @@ import Dashboard from './components/Dashboard';
 import Header from './components/Header';
 import './App.css';
 
+const API_URL = 'https://cloud-resource-monitor-backend.azurewebsites.net';
+
 const App = () => {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +17,7 @@ const App = () => {
     try {
       setLoading(true);
       setError(null);
-      const res = await Axios.get('https://api.example.com/resources'); // Update this URL
+      const res = await Axios.get(`${API_URL}/resources`);
       setResources(res.data);
     } catch (error) {
       setError(error.response?.data?.message || 'Failed to fetch resources. Please try again later.');
