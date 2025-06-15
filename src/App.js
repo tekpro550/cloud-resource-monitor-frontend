@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import Header from './components/Header';
+import CredentialForm from './components/CredentialForm';
 import './App.css';
 
 const API_URL = 'https://cloud-resource-monitor-backend.azurewebsites.net';
@@ -69,7 +70,10 @@ const App = () => {
                   </button>
                 </div>
               ) : (
-                <Dashboard resources={resources} loading={loading} />
+                <>
+                  <CredentialForm />
+                  <Dashboard resources={resources} loading={loading} />
+                </>
               )
             } />
           </Routes>
