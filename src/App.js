@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import Header from './components/Header';
 import './App.css';
@@ -38,9 +38,9 @@ const App = () => {
       <div className="App">
         <Header />
         <main className="main-content">
-          <Switch>
-            <Route exact path="/">
-              {error ? (
+          <Routes>
+            <Route path="/" element={
+              error ? (
                 <div className="error-container">
                   <h2>Error</h2>
                   <p>{error}</p>
@@ -50,9 +50,9 @@ const App = () => {
                 </div>
               ) : (
                 <Dashboard resources={resources} loading={loading} />
-              )}
-            </Route>
-          </Switch>
+              )
+            } />
+          </Routes>
         </main>
       </div>
     </Router>
