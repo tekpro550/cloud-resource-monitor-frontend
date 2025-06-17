@@ -23,6 +23,8 @@ const providerFields = {
   ],
 };
 
+const API_URL = "https://cloud-resource-monitor-backend.azurewebsites.net/api/credentials";
+
 const CredentialForm = () => {
   const [provider, setProvider] = useState('aws');
   const [customerId, setCustomerId] = useState('');
@@ -54,7 +56,7 @@ const CredentialForm = () => {
       ...fields,
     };
     try {
-      const res = await fetch('/api/credentials', {
+      const res = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
