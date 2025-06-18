@@ -1,8 +1,38 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import ResourceCard from './ResourceCard';
 import './Dashboard.css';
 
-const Dashboard = ({ resources }) => {
+const API_URL = "https://cloud-resource-monitor-backend.azurewebsites.net/api/resources?code=rJZ83fU7NodWqU2apkEgBYVqfzWpxFmSoPb8HptO3sP_AzFus-K4iA==";
+
+const Dashboard = () => {
+  const [resources, setResources] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // TODO: Replace with actual customer_id logic
+  const customer_id = "test123";
+
+  useEffect(() => {
+    const fetchResources = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`${API_URL}&customer_id=${customer_id}`);
+        if (!res.ok) {
+          throw new Error(`Error: ${res.status}`);
+        }
+        const data = await res.json();
+        // Adjust this if your backend returns { resources: [...] }
+        setResources(data.resources || []);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchResources();
+  }, []);
+
   const [filters, setFilters] = useState({
     provider: 'all',
     type: 'all',
@@ -15,8 +45,7 @@ const Dashboard = ({ resources }) => {
       const matchesProvider = filters.provider === 'all' || resource.provider === filters.provider;
       const matchesType = filters.type === 'all' || resource.type === filters.type;
       const matchesStatus = filters.status === 'all' || resource.status === filters.status;
-      const matchesSearch = resource.name.toLowerCase().includes(filters.search.toLowerCase());
-
+      const matchesSearch = resource.name?.toLowerCase().includes(filters.search.toLowerCase());
       return matchesProvider && matchesType && matchesStatus && matchesSearch;
     });
   }, [resources, filters]);
@@ -39,6 +68,16 @@ const Dashboard = ({ resources }) => {
       [filterType]: value
     }));
   };
+
+  if (loading) {
+    return <div className="dashboard"><p>Loading resources...</p></div>;
+  }
+  if (error) {
+    return <div className="dashboard"><p style={{ color: 'red' }}>Error: {error}</p></div>;
+  }
+  if (resources.length === 0) {
+    return <div className="dashboard"><p>No resources found.</p></div>;
+  }
 
   return (
     <div className="dashboard">
@@ -105,11 +144,7 @@ const Dashboard = ({ resources }) => {
       </div>
 
       <div className="resource-grid">
-        {resources.length === 0 ? (
-          <div className="loading-state">
-            <p>Loading resources...</p>
-          </div>
-        ) : filteredResources.length === 0 ? (
+        {filteredResources.length === 0 ? (
           <div className="no-resources">
             <p>No resources match the current filters</p>
           </div>
