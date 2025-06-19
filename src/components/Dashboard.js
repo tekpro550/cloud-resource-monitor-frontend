@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import ResourceCard from './ResourceCard';
 import './Dashboard.css';
 
-const API_URL = "https://cloud-resource-monitor-backend.azurewebsites.net/api/resources?code=rJZ83fU7NodWqU2apkEgBYVqfzWpxFmSoPb8HptO3sP_AzFus-K4iA==";
+const API_URL = "https://cloud-resource-monitor-backend.azurewebsites.net/api/resources?code=m_j4vEPIBnNtQVVQlGVqL7wtYNh_6jMNss0a3PM84FIoAzFuHbf9Ww==";
 
 const Dashboard = () => {
   const [resources, setResources] = useState([]);
