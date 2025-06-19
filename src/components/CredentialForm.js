@@ -23,7 +23,7 @@ const providerFields = {
   ],
 };
 
-const API_URL = "https://cloud-resource-monitor-backend.azurewebsites.net/api/credentials?code=rJZ83fU7NodWqU2apkEgBYVqfzWpxFmSoPb8HptO3sP_AzFus-K4iA==";
+const API_URL = "https://cloud-resource-monitor-backend.azurewebsites.net/api/credentials?code=m_j4vEPIBnNtQVVQlGVqL7wtYNh_6jMNss0a3PM84FIoAzFuHbf9Ww==";
 
 const CredentialForm = () => {
   const [provider, setProvider] = useState('aws');
