@@ -1,0 +1,64 @@
+.resource-list-page {
+    padding: 20px;
+}
+
+.resource-list-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.resource-list-header h1 {
+    margin: 0;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.back-link {
+    text-decoration: none;
+    color: #3498db;
+    font-size: 1em;
+}
+
+.resource-list-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.resource-detail-card {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.resource-detail-card h3 {
+    margin-top: 0;
+}
+
+.resource-detail-card p {
+    margin: 5px 0;
+    word-break: break-all;
+}
+
+.view-details-btn {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.view-details-btn:hover {
+    background-color: #2980b9;
+}
+
+.status-running, .status-active { color: #28a745; }
+.status-stopped, .status-inactive { color: #dc3545; }
+.status-pending, .status-stopping { color: #ffc107; } 

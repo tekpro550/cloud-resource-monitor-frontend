@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import ServiceCard from './ServiceCard';
 import './Dashboard.css';
 
@@ -47,9 +47,10 @@ const ResourceDashboard = () => {
     const serviceMap = resources.reduce((acc, resource) => {
       const serviceType = resource.type || 'Unknown Service';
       if (!acc[serviceType]) {
-        acc[serviceType] = { name: serviceType, count: 0 };
+        acc[serviceType] = { name: serviceType, count: 0, resources: [] };
       }
       acc[serviceType].count++;
+      acc[serviceType].resources.push(resource);
       return acc;
     }, {});
     return Object.values(serviceMap);
@@ -91,7 +92,14 @@ const ResourceDashboard = () => {
       ) : (
         <div className="service-grid">
           {services.map(service => (
-            <ServiceCard key={service.name} service={service} />
+            <Link 
+              key={service.name} 
+              to={`/dashboard/${provider}/${customerId}/${service.name}`} 
+              state={{ resources: service.resources }}
+              className="service-card-link"
+            >
+              <ServiceCard service={service} />
+            </Link>
           ))}
         </div>
       )}
