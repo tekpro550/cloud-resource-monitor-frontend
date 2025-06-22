@@ -28,6 +28,7 @@ const API_URL = "https://cloud-resource-monitor-backend.azurewebsites.net/api/cr
 const CredentialForm = () => {
   const [provider, setProvider] = useState('aws');
   const [customerId, setCustomerId] = useState('');
+  const [customerName, setCustomerName] = useState('');
   const [fields, setFields] = useState({});
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -46,12 +47,17 @@ const CredentialForm = () => {
     setCustomerId(e.target.value);
   };
 
+  const handleCustomerNameChange = (e) => {
+    setCustomerName(e.target.value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setStatus(null);
     const payload = {
       customer_id: customerId,
+      customer_name: customerName,
       provider,
       ...fields,
     };
@@ -65,6 +71,7 @@ const CredentialForm = () => {
         setStatus({ type: 'success', message: 'Credentials saved successfully!' });
         setFields({});
         setCustomerId('');
+        setCustomerName('');
       } else {
         const err = await res.json();
         setStatus({ type: 'error', message: err.message || 'Failed to save credentials.' });
@@ -88,6 +95,17 @@ const CredentialForm = () => {
             name="customer_id"
             value={customerId}
             onChange={handleCustomerIdChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="customer_name">Customer Name</label>
+          <input
+            type="text"
+            id="customer_name"
+            name="customer_name"
+            value={customerName}
+            onChange={handleCustomerNameChange}
             required
           />
         </div>
