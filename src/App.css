@@ -1,8 +1,28 @@
+/* General App layout */
 .App {
+  display: flex;
   text-align: center;
-  font-family: Arial, sans-serif;
-  min-height: 100vh;
-  background-color: #f8f9fa;
+}
+
+.main-content {
+  margin-left: 250px; /* Same as sidebar width */
+  padding: 20px;
+  width: calc(100% - 250px);
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f4f7f6;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 
 .dashboard {
@@ -35,10 +55,6 @@ nav a {
   color: white;
   text-decoration: none;
   margin: 10px;
-}
-
-.main-content {
-  padding-top: 64px; /* Height of the header */
 }
 
 .error-container {
@@ -89,19 +105,8 @@ nav a {
   padding: 0;
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  line-height: 1.5;
-  color: #202124;
-}
-
 /* Responsive styles */
 @media (max-width: 768px) {
-  .main-content {
-    padding-top: 56px;
-  }
-
   .error-container {
     margin: 1rem;
     padding: 1.5rem;

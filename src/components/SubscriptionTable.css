@@ -1,0 +1,45 @@
+.table-container {
+  width: 100%;
+  overflow-x: auto; /* For responsiveness on small screens */
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.subscription-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.subscription-table th,
+.subscription-table td {
+  padding: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.subscription-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #333;
+}
+
+.subscription-table tbody tr:hover {
+  background-color: #f4f7f6;
+}
+
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  color: #fff;
+  text-transform: capitalize;
+}
+
+.status-badge.status-active {
+  background-color: #28a745;
+}
+
+.status-badge.status-inactive {
+  background-color: #6c757d;
+} 

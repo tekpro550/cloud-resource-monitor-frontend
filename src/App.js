@@ -1,35 +1,23 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import CredentialForm from './components/CredentialForm';
-import Header from './components/Header';
+import Sidebar from './components/Sidebar';
+import SubscriptionDashboard from './components/SubscriptionDashboard';
 import './App.css';
-
-const Landing = () => (
-  <div className="landing-page">
-    <h2>Welcome to Cloud Resource Monitor</h2>
-    <p>Monitor and manage your cloud resources across AWS, Azure, DigitalOcean, and Alibaba Cloud.</p>
-    <div className="nav-buttons">
-      <Link to="/add-customer" className="nav-btn">Add Customer</Link>
-      <Link to="/dashboard" className="nav-btn">Consolidated Dashboard</Link>
-    </div>
-  </div>
-);
 
 const App = () => {
   return (
     <Router>
       <div className="App">
-        <Header />
-        <nav className="main-nav">
-          <Link to="/add-customer" className="nav-btn">Add Customer</Link>
-          <Link to="/dashboard" className="nav-btn">Consolidated Dashboard</Link>
-        </nav>
+        <Sidebar />
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<Landing />} />
+            <Route path="/" element={<Navigate to="/dashboard/aws" />} />
             <Route path="/add-customer" element={<CredentialForm />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/:provider" element={<Dashboard />} />
+            <Route path="/dashboard/azure/subscriptions" element={<SubscriptionDashboard />} />
+            <Route path="/dashboard" element={<Navigate to="/dashboard/aws" />} />
           </Routes>
         </main>
       </div>
