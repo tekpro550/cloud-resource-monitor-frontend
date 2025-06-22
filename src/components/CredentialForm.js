@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './CredentialForm.css';
 
 const providerFields = {
   aws: [
@@ -76,49 +77,51 @@ const CredentialForm = () => {
   };
 
   return (
-    <form className="credential-form" onSubmit={handleSubmit}>
-      <h2>Add Cloud Provider Credentials</h2>
-      <div className="form-group">
-        <label htmlFor="customer_id">Customer ID</label>
-        <input
-          type="text"
-          id="customer_id"
-          name="customer_id"
-          value={customerId}
-          onChange={handleCustomerIdChange}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="provider">Provider</label>
-        <select id="provider" value={provider} onChange={handleProviderChange}>
-          <option value="aws">AWS</option>
-          <option value="azure">Azure</option>
-          <option value="digitalocean">DigitalOcean</option>
-          <option value="alibaba">Alibaba Cloud</option>
-        </select>
-      </div>
-      {providerFields[provider].map((field) => (
-        <div className="form-group" key={field.name}>
-          <label htmlFor={field.name}>{field.label}</label>
+    <div className="credential-form-container">
+      <form className="credential-form" onSubmit={handleSubmit}>
+        <h2>Add Cloud Provider Credentials</h2>
+        <div className="form-group">
+          <label htmlFor="customer_id">Customer ID</label>
           <input
-            type={field.type}
-            id={field.name}
-            name={field.name}
-            value={fields[field.name] || ''}
-            onChange={handleFieldChange}
-            required={!field.optional}
-            autoComplete="off"
+            type="text"
+            id="customer_id"
+            name="customer_id"
+            value={customerId}
+            onChange={handleCustomerIdChange}
+            required
           />
         </div>
-      ))}
-      <button type="submit" disabled={loading}>
-        {loading ? 'Saving...' : 'Save Credentials'}
-      </button>
-      {status && (
-        <div className={`form-status ${status.type}`}>{status.message}</div>
-      )}
-    </form>
+        <div className="form-group">
+          <label htmlFor="provider">Provider</label>
+          <select id="provider" value={provider} onChange={handleProviderChange}>
+            <option value="aws">AWS</option>
+            <option value="azure">Azure</option>
+            <option value="digitalocean">DigitalOcean</option>
+            <option value="alibaba">Alibaba Cloud</option>
+          </select>
+        </div>
+        {providerFields[provider].map((field) => (
+          <div className="form-group" key={field.name}>
+            <label htmlFor={field.name}>{field.label}</label>
+            <input
+              type={field.type}
+              id={field.name}
+              name={field.name}
+              value={fields[field.name] || ''}
+              onChange={handleFieldChange}
+              required={!field.optional}
+              autoComplete="off"
+            />
+          </div>
+        ))}
+        <button type="submit" disabled={loading}>
+          {loading ? 'Saving...' : 'Save Credentials'}
+        </button>
+        {status && (
+          <div className={`form-status ${status.type}`}>{status.message}</div>
+        )}
+      </form>
+    </div>
   );
 };
 
