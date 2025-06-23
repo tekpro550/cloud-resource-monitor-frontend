@@ -19,11 +19,6 @@ const Sidebar = () => {
           </li>
           <li>
             <NavLink to="/dashboard/azure">Azure</NavLink>
-            <ul className="sidebar-submenu">
-              <li>
-                <NavLink to="/dashboard/azure/subscriptions">All Subscriptions</NavLink>
-              </li>
-            </ul>
           </li>
           <li>
             <NavLink to="/dashboard/digitalocean">DigitalOcean</NavLink>
