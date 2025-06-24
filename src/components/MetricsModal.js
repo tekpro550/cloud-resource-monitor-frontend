@@ -13,29 +13,47 @@ const MetricsModal = ({ resource, provider, customerId, onClose }) => {
     const [metrics, setMetrics] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [refreshing, setRefreshing] = useState(false);
+
+    const fetchMetrics = async () => {
+        if (!resource) return;
+        setLoading(true);
+        setError(null);
+        try {
+            const url = `${API_BASE_URL}/get_resource_details?code=${FUNCTION_KEY}&customer_id=${customerId}&provider=${provider}&resource_id=${encodeURIComponent(resource.id)}&region=${resource.region}`;
+            const response = await fetch(url);
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Failed to fetch metrics: ${response.status} - ${errorText}`);
+            }
+            const data = await response.json();
+            setMetrics(data.metrics);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchMetrics = async () => {
-            if (!resource) return;
-            setLoading(true);
-            setError(null);
-            try {
-                const url = `${API_BASE_URL}/get_resource_details?code=${FUNCTION_KEY}&customer_id=${customerId}&provider=${provider}&resource_id=${encodeURIComponent(resource.id)}&region=${resource.region}`;
-                const response = await fetch(url);
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Failed to fetch metrics: ${response.status} - ${errorText}`);
-                }
-                const data = await response.json();
-                setMetrics(data.metrics);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchMetrics();
     }, [resource, provider, customerId]);
+
+    const handleRefresh = async () => {
+        setRefreshing(true);
+        setError(null);
+        try {
+            const refreshUrl = `${API_BASE_URL}/refresh_metrics?code=${FUNCTION_KEY}&customer_id=${customerId}&provider=${provider}&resource_id=${encodeURIComponent(resource.id)}&region=${resource.region}`;
+            const res = await fetch(refreshUrl, { method: 'POST' });
+            if (!res.ok) throw new Error(`Error refreshing metrics: ${res.status}`);
+            // After refresh, reload metrics
+            await fetchMetrics();
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setRefreshing(false);
+        }
+    };
 
     const getChartData = (metric) => ({
         labels: metric.data.map(d => new Date(d.timestamp)),
@@ -59,10 +77,13 @@ const MetricsModal = ({ resource, provider, customerId, onClose }) => {
             <div className="modal-content" onClick={e => e.stopPropagation()}>
                 <div className="modal-header">
                     <h2>Metrics for {resource.name}</h2>
+                    <button onClick={handleRefresh} className="refresh-btn" disabled={refreshing || loading}>
+                        {refreshing ? 'Refreshing...' : 'Refresh'}
+                    </button>
                     <button onClick={onClose} className="close-btn">&times;</button>
                 </div>
                 <div className="modal-body">
-                    {loading && <p>Loading metrics...</p>}
+                    {(loading || refreshing) && <p>Loading metrics...</p>}
                     {error && <div className="error-container"><p>Error: {error}</p></div>}
                     {metrics && metrics.length > 0 ? (
                         <div className="charts-grid">
@@ -73,7 +94,7 @@ const MetricsModal = ({ resource, provider, customerId, onClose }) => {
                             ))}
                         </div>
                     ) : (
-                        !loading && <p>No metrics available for this resource.</p>
+                        !loading && !refreshing && <p>No metrics available for this resource.</p>
                     )}
                 </div>
             </div>

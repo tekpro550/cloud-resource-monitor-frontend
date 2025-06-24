@@ -34,6 +34,8 @@ const ResourceDashboard = () => {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshingMetrics, setIsRefreshingMetrics] = useState(false);
+  const [metricsMessage, setMetricsMessage] = useState(null);
   const [error, setError] = useState(null);
 
   const providerInfo = useMemo(() => PROVIDER_CONFIG[provider], [provider]);
@@ -84,6 +86,22 @@ const ResourceDashboard = () => {
     }
   };
 
+  const handleRefreshMetrics = async () => {
+    setIsRefreshingMetrics(true);
+    setMetricsMessage(null);
+    setError(null);
+    try {
+      const refreshUrl = `${API_BASE_URL}/refresh_metrics?code=${API_CODE}&customer_id=${customerId}&provider=${provider}`;
+      const res = await fetch(refreshUrl, { method: 'POST' });
+      if (!res.ok) throw new Error(`Error refreshing metrics: ${res.status}`);
+      setMetricsMessage('Metrics refreshed successfully!');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsRefreshingMetrics(false);
+    }
+  };
+
   const services = useMemo(() => {
     const serviceMap = resources.reduce((acc, resource) => {
       const serviceType = resource.type || 'Unknown Service';
@@ -113,6 +131,9 @@ const ResourceDashboard = () => {
             <button onClick={handleRefresh} disabled={isRefreshing || loading}>
               {isRefreshing ? 'Scanning...' : 'Refresh Resources'}
             </button>
+            <button onClick={handleRefreshMetrics} disabled={isRefreshingMetrics || loading} style={{ marginLeft: 10 }}>
+              {isRefreshingMetrics ? 'Refreshing Metrics...' : 'Refresh Metrics'}
+            </button>
           </div>
         </div>
         <div className="dashboard-stats">
@@ -132,14 +153,17 @@ const ResourceDashboard = () => {
       </div>
       
       <div className="dashboard-content">
-        {isRefreshing && (
+        {(isRefreshing || isRefreshingMetrics) && (
           <div className="loading-overlay">
             <div className="loading-state">
-              <p>Scanning for new resources... this may take a moment.</p>
+              <p>{isRefreshing ? 'Scanning for new resources... this may take a moment.' : 'Refreshing metrics... this may take a moment.'}</p>
             </div>
           </div>
         )}
-        {loading && !isRefreshing ? (
+        {metricsMessage && !isRefreshingMetrics && (
+          <div className="success-message"><p>{metricsMessage}</p></div>
+        )}
+        {loading && !isRefreshing && !isRefreshingMetrics ? (
           <div className="loading-state"><p>Loading services...</p></div>
         ) : error ? (
           <div className="error-container"><p style={{ color: 'red' }}>Error: {error}</p></div>
