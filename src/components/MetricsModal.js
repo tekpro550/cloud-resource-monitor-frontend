@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, TimeScale } from 'chart.js';
 import 'chartjs-adapter-date-fns';
@@ -13,7 +13,7 @@ const MetricsModal = ({ resource, provider, customerId, onClose }) => {
     const [error, setError] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
 
-    const fetchMetrics = async () => {
+    const fetchMetrics = useCallback(async () => {
         if (!resource) return;
         setLoading(true);
         setError(null);
@@ -43,11 +43,11 @@ const MetricsModal = ({ resource, provider, customerId, onClose }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [resource, provider, customerId]); // Added dependencies for useCallback
 
     useEffect(() => {
         fetchMetrics();
-    }, [resource, provider, customerId]);
+    }, [fetchMetrics]); // fetchMetrics is now a stable function due to useCallback
 
     const handleRefresh = async () => {
         setRefreshing(true);
@@ -179,4 +179,3 @@ const MetricsModal = ({ resource, provider, customerId, onClose }) => {
 };
 
 export default MetricsModal;
-
